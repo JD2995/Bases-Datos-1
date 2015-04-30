@@ -19,21 +19,22 @@ function setGlobalPersona_ID($Usuario){
     //Global de persona_id de la persona con la sesión iniciada
     $GLOBALS['Persona_ID']=$Persona_ID;
 }
-
 //Función que crear el modal con la información de cada mascota
 function crearModalMascota($mascota_id){
-    $nombre= "Puppy";
-    $tipo= "Perro";
-    $raza= "Única";
-    $color= "Café";
-    $severidad= "Grave";
-    $tamaño= "Grande";
-    $entrenamiento= "Fácil";
-    $nivelEnergia= "Mucha";
-    $rescatista= "Ganondorf";
-    $veterinario="Link";
-    $espacio= "Mucho";
-    $Enfermedad= "Conjuntivitis";
+    include_once('Consulta.php');
+    $consul= new Consulta();
+    $nombre= $consul->getNombre($mascota_id);
+    $tipo= $consul->getTipo($mascota_id);
+    $raza= $consul->getRaza($mascota_id);
+    $color= $consul->getColor($mascota_id);
+    $severidad= $consul->getColor($mascota_id);
+    $tamaño= $consul->getTamaño($mascota_id);
+    $entrenamiento= $consul->getEntrenamiento($mascota_id);
+    $nivelEnergia= $consul->getEnergia($mascota_id);
+    $rescatista= $consul->getRescatista($mascota_id);
+    $veterinario= $consul->getVeterinario($mascota_id);
+    $espacio= $consul->getEntrenamiento($mascota_id);
+    $Enfermedad= $consul->getEnfermedad($mascota_id);
     print "<div id=\"Mascota$mascota_id\" class=\"modal fade\" >
             <div class=\"modal-dialog\">
                 <div class=\"modal-content\">
@@ -203,6 +204,15 @@ function crearModalMascota($mascota_id){
       statusvars: ['statusA', 'statusB', 'statusC'], //register 3 variables that contain current panel (start), current panel (last), and total panels
       contenttype: ['external'] //content setting ['inline'] or ['external', 'path_to_external_file']
     })
+  </script>
+  <script>
+      tbody,
+    thead,
+    thead th,
+    tr.even,
+    tr.odd {
+      border: 0;
+    }
   </script>
   <style type="text/css">
     /* Carousel */
