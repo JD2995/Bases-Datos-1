@@ -19,6 +19,152 @@ function setGlobalPersona_ID($Usuario){
     //Global de persona_id de la persona con la sesión iniciada
     $GLOBALS['Persona_ID']=$Persona_ID;
 }
+
+//Función que crear el modal con la información de cada mascota
+function crearModalMascota($mascota_id){
+    $nombre= "Puppy";
+    $tipo= "Perro";
+    $raza= "Única";
+    $color= "Café";
+    $severidad= "Grave";
+    $tamaño= "Grande";
+    $entrenamiento= "Fácil";
+    $nivelEnergia= "Mucha";
+    $rescatista= "Ganondorf";
+    $veterinario="Link";
+    $espacio= "Mucho";
+    $Enfermedad= "Conjuntivitis";
+    print "<div id=\"Mascota$mascota_id\" class=\"modal fade\" >
+            <div class=\"modal-dialog\">
+                <div class=\"modal-content\">
+                    <div class=\"modal-header\">
+                        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" arial-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>
+                        <h4 class=\"modal-title\" id=\"myModalLabel\">$nombre</h4>
+                        </div>
+                        <div class=\"modal-body\">
+                            <div class=\"row\">
+                                <div class=\"col-sm-1\"></div>
+                                <div class=\"col-xs-5 col-md-5\">
+                                    <div class=\"thumbnail\">
+                                        <img src=\"http://localhost/Adopciones/FotoDespues.php?id=$mascota_id\">
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class=\"row\">
+                                <div class=\"col-sm-5\">
+                                    <table class=\"table\">
+                                        <tr>
+                                            <td align=\"right\">
+                                                Nombre:
+                                            </td>
+                                            <td>
+                                                $nombre
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Raza:
+                                            </td>
+                                            <td>
+                                                $raza
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Severidad:
+                                            </td>
+                                            <td>
+                                                $severidad
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Entrenamiento:
+                                            </td>
+                                            <td>
+                                                $entrenamiento
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Rescatista:
+                                            </td>
+                                            <td>
+                                                $rescatista
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Espacio:
+                                            </td>
+                                            <td>
+                                                $espacio
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class=\"col-sm-5\">
+                                    <table class=\"table\">
+                                        <tr>
+                                            <td align=\"right\">
+                                                Tipo:
+                                            </td>
+                                            <td>
+                                                $tipo
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Color:
+                                            </td>
+                                            <td>
+                                                $color
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Tamaño:
+                                            </td>
+                                            <td>
+                                                $tamaño
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Nivel de Energía:
+                                            </td>
+                                            <td>
+                                                $nivelEnergia
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Veterinario:
+                                            </td>
+                                            <td>
+                                                $veterinario
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align=\"right\">
+                                                Enfermedad:
+                                            </td>
+                                            <td>
+                                                $Enfermedad
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class=\"modal-footer\">
+                          <a href = \"Formulario.php\"> <button class=\"btn btn-primary\"> Completar Formulario</button></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +181,10 @@ function setGlobalPersona_ID($Usuario){
     <title>Buscando mi hogar</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Custom styles for this template -->
     <link href="css/mainPage.css" rel="stylesheet">
@@ -301,7 +450,7 @@ function setGlobalPersona_ID($Usuario){
         }else{
             $mascota= $mascotasArray[$indMascota];
             print "<div class=\"col-xs-2 col-md-2\">
-                <a href=\"#\" class=\"thumbnail\" title=\"Nombre: $mascota->nombre&#13;Tipo: Perro&#13;Raza: Común\">
+                <a href=\"#Mascota$mascota->mascota_ID\" data-toggle=\"modal\" class=\"thumbnail\" title=\"Nombre: $mascota->nombre&#13;Tipo: Perro&#13;Raza: Común\">
                     <img src=\"http://localhost/Adopciones/FotoDespues.php?id=$mascota->mascota_ID\">
                 </a>
                 </div>";
@@ -309,6 +458,16 @@ function setGlobalPersona_ID($Usuario){
         }
     }
     print "</div>";
+    if(isset($_GET['cont'])){
+        $indMascota= $_GET['cont'];
+    }
+    else{
+        $indMascota=0;   
+    }
+    for($indMascota;$indMascota<count($mascotasArray);$indMascota++){
+        $mascota= $mascotasArray[$indMascota];
+        CrearModalMascota($mascota->mascota_ID);
+    }
     ?>
     
     <script type="text/javascript">
@@ -316,8 +475,6 @@ function setGlobalPersona_ID($Usuario){
             window.open("http://localhost/Adopciones/index.php?cont="+contMascotas,"_self");
         }
     </script>
-    
-    
     
     <hr>
     
