@@ -271,7 +271,14 @@ function setGlobalPersona_ID($Usuario){
     $consul= new Consulta();
     $mascotasArray=$consul->getNoAdoptados(2);
     $contadorMascotas=0;
-    foreach($mascotasArray as $mascota){
+    if(isset($_GET['cont'])){
+        $indMascota= $_GET['cont'];
+    }
+    else{
+        $indMascota=0;   
+    }
+    
+    for($indMascota;$indMascota<count($mascotasArray);$indMascota++){
         if($contadorMascotas == 0){
             print "<div class=\"row\"><div class=\"col-sm-1\"></div>";
         }
@@ -281,17 +288,18 @@ function setGlobalPersona_ID($Usuario){
         }
         //Si se muestra el máximo de mascotas por página
         if($contadorMascotas == 20){
-            print "</div>"; //Cierra el row
-            /*print "<div class=\"row\">
+            print "<div class=\"row\">
                     <div class=\"col-sm-3\"><\div>
                     <div class=\"col-sm-2\">
-                        <button type=\"button\" class=\"btn btn-default btn-lg\">
+                        <button type=\"button\" class=\"btn btn-default btn-lg\" onclick=\"siguienteMascota($contadorMascotas)\">
                             <span class=\"glyphicon glyphicon-arrow-right\" aria-hidden=\"true\"></span> Siguiente
                         </button>
                     </div>
-                   ";*/
+                    </div>
+                   ";
             break;   
         }else{
+            $mascota= $mascotasArray[$indMascota];
             print "<div class=\"col-xs-2 col-md-2\">
                 <a href=\"#\" class=\"thumbnail\" title=\"Nombre: $mascota->nombre&#13;Tipo: Perro&#13;Raza: Común\">
                     <img src=\"http://localhost/Adopciones/FotoDespues.php?id=$mascota->mascota_ID\">
@@ -300,8 +308,14 @@ function setGlobalPersona_ID($Usuario){
             $contadorMascotas++;
         }
     }
-    //print "</div>";
+    print "</div>";
     ?>
+    
+    <script type="text/javascript">
+        function siguienteMascota(contMascotas){
+            window.open("http://localhost/Adopciones/index.php?cont="+contMascotas,"_self");
+        }
+    </script>
     
     
     
