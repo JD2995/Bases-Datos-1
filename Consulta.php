@@ -50,6 +50,18 @@ class Consulta {
         }
         return $arrayMascotas;
     }
+    //Función que devuelve el nombre del adoptante de una mascota
+    function getAdoptanteMascota($idMascota){
+        $conn= $GLOBALS['conn'];
+        $stid= oci_parse($conn,"begin :nombre:= PAQUETE_CALIFICACION.GET_NOMBRE_ADOPTANTE(:idMascota);end;");
+        $nombre="";
+        
+        oci_bind_by_name($stid, "nombre", $nombre,50);
+        oci_bind_by_name($stid, "idMascota", $idMascota);
+        
+        oci_execute($stid);
+        return $nombre;
+    }
     function getNombre($idMascota){
         $conn= $GLOBALS['conn'];
         $stid= oci_parse($conn,"begin :nombre:= PAQUETE_MOSTRAR.GET_NOMBRE_MASCOTA(:idMascota);end;");
@@ -180,6 +192,11 @@ class Consulta {
         oci_bind_by_name($stid, "idMascota", $idMascota);
         
         oci_execute($stid);
+        $lenght_enfermedad= strlen($enfermedad);
+        if($lenght_enfermedad > 0){
+            $enfermedad[$lenght_enfermedad-2]= ' ';
+        }
+        
         return $enfermedad;
     }
 }

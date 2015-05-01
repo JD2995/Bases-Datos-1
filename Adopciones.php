@@ -160,7 +160,7 @@ function crearModalMascota($mascota_id){
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Buscando mi hogar</title>
+    <title>Adopciones</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">

@@ -77,7 +77,7 @@
                                                         if(validarRescatista($GLOBALS['Persona_ID'])=='0'){
                                                             print "<li><a href=\"#\">Ingresar Mascota</a></li>";
                                                         }
-                                                        print "<li><a href=\"Adopciones\">Adopciones</a></li>
+                                                        print "<li><a href=\"Adopciones.php\">Adopciones</a></li>
                                                             <li>
                                                                 <div class=\"btn-group\">
                                                                     <button type=\"button\" class=\"btn btn-default dropdown-toggle\"
