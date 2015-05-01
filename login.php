@@ -1,6 +1,6 @@
 <?php
     function getConnection(){
-        include_once('index.php');
+        include_once('globales.php');
         return $GLOBALS['conn'];
     }
 ?>
@@ -12,6 +12,7 @@
 	$usuario = $_POST["usuario"];       //Obtiene el nombre de usuario del cuadro de texto
 	$contrasena = $_POST["contrasena"]; //Obtiene la contraseña del cuadro de texto
         
+        //Obtiene la conexión con la base de datos
         $conn= getConnection();
         //Validación de usuario y contraseña
         $stid= oci_parse($conn,"begin :valLogin:= PAQUETE_LOGIN.VALIDAR_LOGIN(:usuario,:contrasena);end;");
@@ -67,17 +68,39 @@
 					            <span class="icon-bar"></span>
 					            <span class="icon-bar"></span>
 					          </button>
-					          <a class="navbar-brand" href="#">Buscando mi hogar</a>
+                                                    <img class = \"nav navbar-nav\"src = \"Imagenes/logo.png\" height=\"42\" width=\"42\"/>
+                                                    <a class="navbar-brand" href="index.php?">Buscando mi hogar</a>
 					          <ul class="nav navbar-nav">
-					            <li class="active"><a href="#">Inicio</a></li>
+                                                      <li class="active"><a href="index.php">Inicio</a></li>
+                                                      <?php
+                                                        setGlobalPersona_ID($usuario);
+                                                        if(validarRescatista($GLOBALS['Persona_ID'])=='0'){
+                                                            print "<li><a href=\"#\">Ingresar Mascota</a></li>";
+                                                        }
+                                                        print "<li><a href=\"Adopciones\">Adopciones</a></li>
+                                                            <li>
+                                                                <div class=\"btn-group\">
+                                                                    <button type=\"button\" class=\"btn btn-default dropdown-toggle\"
+                                                                            data-toggle=\"dropdown\" style=\"margin-top:9px;background:#2E2E2E;color:#F2F2F2;border:none;\">
+                                                                      Consulta <span class=\"caret\"></span>
+                                                                    </button>
+                                                                    <ul class=\"dropdown-menu\" role=\"menu\">
+                                                                      <li><a href=\"#\">Persona</a></li>
+                                                                      <li><a href=\"#\">Mascota</a></li>
+                                                                      <li><a href=\"#\">Estadisticas</a></li>
+                                                                    </ul>
+                                                                </div>	
+                                                            </li>";
+                                                      ?>
 					            <li><a href="#about">Acerca de</a></li>
 					            <li><a href="#registro">Registrarse</a></li>
 					          </ul>
 					          <form class="navbar-form navbar-right" method="POST" action="salir.php">
 					            <small class = "btn btn-success"><?php echo $usuario;?> <small>   </small></small>
 					            <button type="submit" class="btn btn-success">Cerrar Sesion</button>
+                                                    <button class = "btn btn-primary"><a href="perfil.php" style = "color:white;float: right;">Mi perfil</a></button>
 					          </form>
-					          <button class = "btn btn-primary"><a href="perfil.php" style = "color:white;float: right;">Mi perfil</a></button>
+					          
 					          
 					        </div> <!-- fin div navbar-header --> 
 					      </div><!-- /.container -->

@@ -28,6 +28,28 @@ class Consulta {
         
         return $arrayMascotas;
     }
+    //Función que devuelve en un array las mascotas que se encuentran en adopción
+    function getEnAdopcion(){
+        $conn= $GLOBALS['conn'];
+        $stid= oci_parse($conn,"begin :cursor:= GET_EN_ADOPCION();end;");
+        $p_cursor= oci_new_cursor($conn);
+        
+        oci_bind_by_name($stid, ':cursor', $p_cursor, -1, OCI_B_CURSOR);
+        
+        oci_execute($stid);
+        oci_execute($p_cursor, OCI_DEFAULT);
+        
+        //Creacion del array con las mascotas
+        include_once('Mascota.php');
+        $arrayMascotas= array();
+        while (($row = oci_fetch_array($p_cursor, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
+            $mascota= new Mascota();
+            $mascota->setMascota_ID($row['MASCOTA_ID']);
+            $mascota->setNombre($row['NOMBRE']);
+            $arrayMascotas[]= $mascota;
+        }
+        return $arrayMascotas;
+    }
     function getNombre($idMascota){
         $conn= $GLOBALS['conn'];
         $stid= oci_parse($conn,"begin :nombre:= PAQUETE_MOSTRAR.GET_NOMBRE_MASCOTA(:idMascota);end;");

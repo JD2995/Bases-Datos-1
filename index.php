@@ -1,24 +1,5 @@
 <?php
-//Conectar a la base de datos
-$conn = oci_connect('progra_1', 'progra_1', 'localhost/dbprueba');
-if (!$conn) {
-    $e = oci_error();
-    trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
-}    
-$GLOBALS['conn']=$conn;
-
-//Función que obtiene persona_ID por medio de nombre de Usuario y lo coloca como variable global
-function setGlobalPersona_ID($Usuario){
-    $stid= oci_parse($GLOBALS['conn'],"begin :persona_id:= PAQUETE_LOGIN.GET_PERSONAID_X_USUARIO(:usuario);end;");
-    $Persona_ID;
-        
-    oci_bind_by_name($stid, ":persona_id", $Persona_ID);
-    oci_bind_by_name($stid, ":usuario", $Usuario);
-    oci_execute($stid);
-    
-    //Global de persona_id de la persona con la sesión iniciada
-    $GLOBALS['Persona_ID']=$Persona_ID;
-}
+include 'Globales.php';
 //Función que crear el modal con la información de cada mascota
 function crearModalMascota($mascota_id){
     include_once('Consulta.php');
@@ -194,142 +175,89 @@ function crearModalMascota($mascota_id){
     <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
     <script src="javascript/carousel.js"></script>
     <script src="javascript/jquery.js" type="text/javascript"></script>
-    <script type="text/javascript">
-    stepcarousel.setup({
-      galleryid: 'carousel', //id of carousel DIV
-      beltclass: 'belt', //class of inner "belt" DIV containing all the panel DIVs
-      panelclass: 'panel', //class of panel DIVs each holding content
-      autostep: {enable:true, moveby:1, pause:3000},
-      panelbehavior: {speed:500, wraparound:true, persist:true},
-      statusvars: ['statusA', 'statusB', 'statusC'], //register 3 variables that contain current panel (start), current panel (last), and total panels
-      contenttype: ['external'] //content setting ['inline'] or ['external', 'path_to_external_file']
-    })
-  </script>
-  <script>
-      tbody,
-    thead,
-    thead th,
-    tr.even,
-    tr.odd {
-      border: 0;
-    }
-  </script>
-  <style type="text/css">
-    /* Carousel */
-    
-    #carousel {
-      position: relative; /* Necesario */
-      overflow: hidden; /* Necesario */
-      height: 250px;
-      margin-left:35px;
-      background:#5B5B5B url(Imagenes/carousel-bg.png) bottom left repeat-x;
-    }
-
-    #carousel .belt {
-      position: absolute; /* Necesario */
-      left: 0;
-      top: 0;
-      margin:0 10px 10px 0;
-    }
-
-    #carousel .panel {
-      width:265px;
-      float: left; /* Necesario */
-      overflow: hidden;
-      margin: 15px;
-      padding:7px;
-      border:1px solid #5B5B5B;
-      background:#383838 url(Imagenes/carousel-panel-bg.png) bottom left repeat-x;
-    }
-
-    #carousel .panel .panel-text {
-      padding-top:5px;
-      font-size:13px;
-      font-family:Verdana, Geneva, sans-serif;
-      color:#FFF;
-    }
-
-    #carousel .panel .panel-text a {
-      color:#CCC;
-      text-decoration:none;
-    }
-
-    #carousel .panel .panel-text a:hover {
-      color:#FFF;
-      text-decoration:underline;
-    }
-
-          /* Botones del carousel */
-          
-    .button-prev {
-      height:250px;
-      width:35px;
-      float:left;
-      background:#5B5B5B url(Imagenes/carousel-bg.png) bottom left repeat-x;
-      -moz-border-radius:10px 0 0 10px;
-    }
-
-    .button-prev a {
-      display:block;
-      padding:5px;
-      margin-top:105px;
-    }
-
-    .button-next {
-      height:250px;
-      width:35px;
-      float:right;
-      background:#5B5B5B url(Imagenes/carousel-bg.png) bottom left repeat-x;
-      -moz-border-radius:0 10px 10px 0;
-    }
-
-    .button-next a {
-      display:block;
-      padding:5px;
-      margin-top:105px;
-    }
-
-
-    a img {
-      border:none;
-    }
-  </style>
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body>
-    <nav class="navbar navbar-fixed-top navbar-inverse">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <img class = "nav navbar-nav"src = "Imagenes/logo.png" height="42" width="42"/>
-          <p class = "nav navbar-nav"> "   "</p>
-          <a class="navbar-brand" href="#">Buscando mi hogar</a>
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Inicio</a></li>
-            <li><a href="#registro">Registrarse</a></li>
-          </ul>
-          <form class="navbar-form navbar-right" method="POST" action="login.php">
-            <div class="form-group">
-              <input type="text" placeholder="Usuario" class="form-control" name = "usuario" required autofocus>
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Contraseña" class="form-control" name = "contrasena" required>
-            </div>
-            <button type="submit" class="btn btn-success">Ingresar</button>
-          </form>
-        </div> <!-- fin div navbar-header --> 
-      </div><!-- /.container -->
-    </nav><!-- /.navbar -->
+      <?php
+        //Observa si existe una sesión iniciada
+        if(session_start() && isset($_SESSION['usuario'])){
+            $usuario= $_SESSION['usuario'];
+            print "<nav class=\"navbar navbar-fixed-top navbar-inverse\">
+                <div class=\"container\">
+                  <div class=\"navbar-header\">
+                    <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">
+                      <span class=\"sr-only\">Toggle navigation</span>
+                      <span class=\"icon-bar\"></span>
+                      <span class=\"icon-bar\"></span>
+                      <span class=\"icon-bar\"></span>
+                    </button>
+                    <img class = \"nav navbar-nav\"src = \"Imagenes/logo.png\" height=\"42\" width=\"42\"/>
+                    <a class=\"navbar-brand\" href=\"#\">Buscando mi hogar</a>
+                    <ul class=\"nav navbar-nav\">
+                      <li class=\"active\"><a href=\"#\">Inicio</a></li>";
+                      setGlobalPersona_ID($usuario);
+                      if(validarRescatista($GLOBALS['Persona_ID'])=='0'){
+                          print "<li><a href=\"#\">Ingresar Mascota</a></li>";
+                      }
+                      print "<li><a href=\"Adopciones.php\">Adopciones</a></li>
+                          <li>
+                            <div class=\"btn-group\">
+                                <button type=\"button\" class=\"btn btn-default dropdown-toggle\"
+                                        data-toggle=\"dropdown\" style=\"margin-top:9px;background:#2E2E2E;color:#F2F2F2;border:none;\">
+                                  Consulta <span class=\"caret\"></span>
+                                </button>
+                                <ul class=\"dropdown-menu\" role=\"menu\">
+                                  <li><a href=\"#\">Persona</a></li>
+                                  <li><a href=\"#\">Mascota</a></li>
+                                  <li><a href=\"#\">Estadisticas</a></li>
+                                </ul>
+                            </div>	
+                        </li>
+                          <li><a href=\"#about\">Acerca de</a></li>
+                    </ul>
+                    <form class=\"navbar-form navbar-right\" method=\"POST\" action=\"salir.php\">
+                      <small class = \"btn btn-success\">$usuario<small>   </small></small>
+                      <button type=\"submit\" class=\"btn btn-success\">Cerrar Sesion</button>
+                      <button class = \"btn btn-primary\"><a href=\"perfil.php\" style = \"color:white;float: right;\">Mi perfil</a></button>
+                    </form>
+                    
+
+                  </div> <!-- fin div navbar-header --> 
+                </div><!-- /.container -->
+              </nav><!-- /.navbar -->";
+        }
+        else{
+            print "<nav class=\"navbar navbar-fixed-top navbar-inverse\">
+                <div class=\"container\">
+                  <div class=\"navbar-header\">
+                    <button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\">
+                      <span class=\"sr-only\">Toggle navigation</span>
+                      <span class=\"icon-bar\"></span>
+                      <span class=\"icon-bar\"></span>
+                      <span class=\"icon-bar\"></span>
+                    </button>
+                    <img class = \"nav navbar-nav\"src = \"Imagenes/logo.png\" height=\"42\" width=\"42\"/>
+                    <p class = \"nav navbar-nav\"> \"   \"</p>
+                    <a class=\"navbar-brand\" href=\"#\">Buscando mi hogar</a>
+                    <ul class=\"nav navbar-nav\">
+                      <li class=\"active\"><a href=\"#\">Inicio</a></li>
+                      <li><a href=\"#registro\">Registrarse</a></li>
+                    </ul>
+                    <form class=\"navbar-form navbar-right\" method=\"POST\" action=\"login.php\">
+                      <div class=\"form-group\">
+                        <input type=\"text\" placeholder=\"Usuario\" class=\"form-control\" name = \"usuario\" required autofocus>
+                      </div>
+                      <div class=\"form-group\">
+                        <input type=\"password\" placeholder=\"Contraseña\" class=\"form-control\" name = \"contrasena\" required>
+                      </div>
+                      <button type=\"submit\" class=\"btn btn-success\">Ingresar</button>
+                    </form>
+                  </div> <!-- fin div navbar-header --> 
+                </div><!-- /.container -->
+              </nav><!-- /.navbar -->";
+        }
+      ?>
+   
     <div class="container">
       <div class="row row-offcanvas row-offcanvas-right">
 
@@ -341,78 +269,7 @@ function crearModalMascota($mascota_id){
                 <h1>Bienvenido!</h1>
                 <p>Esta es la página oficial de lucha animal.</p>
               </div>
-              <div class = "row">
-                <div class="button-next">
-            <a href="javascript:stepcarousel.stepBy('carousel', 1)"><img src="Imagenes/arrow_right.png" /></a>
-          </div>
-
-          <div class="button-prev">
-            <a href="javascript:stepcarousel.stepBy('carousel', -1)"><img src="Imagenes/arrow_left.png" /></a>
-          </div>
-
-          <div id="carousel" class="stepcarousel">
-        
-            <div class="belt">
-      
-              <div class="panel">
-                <img src="Imagenes/animales_8.jpg" />
-                <div class="panel-text">
-                  <p></p>
-                </div>
-              </div>
-        
-              <div class="panel">
-                <img src="Imagenes/animales_1.jpg" />
-                <div class="panel-text">
-                  <p></p>
-                </div>
-              </div>
-        
-              <div class="panel">
-                <img src="Imagenes/animales_2.jpg" />
-                <div class="panel-text">
-                  <p></p>
-                </div>
-              </div>
-        
-              <div class="panel">
-                <img src="Imagenes/animales_3.jpg" />
-                <div class="panel-text">
-                  <p></p>
-                </div>
-              </div>
-        
-              <div class="panel">
-                <img src="Imagenes/animales_4.jpg" />
-                <div class="panel-text">
-                  <p></p>
-                </div>
-              </div>
-        
-              <div class="panel">
-                <img src="Imagenes/animales_5.jpg" />
-                <div class="panel-text">
-                  <p></p>
-                </div>
-              </div>
-        
-              <div class="panel">
-                <img src="Imagenes/animales_6.jpg" />
-                <div class="panel-text">
-                  <p></p>
-                </div>
-              </div>
-        
-              <div class="panel">
-                <img src="Imagenes/animales_7.jpg" />
-                <div class="panel-text">
-                  <p></p>
-                </div>
-              </div>
-          
-            </div> <!--- end div belt -->
-          </div>  <!-- end div carousel -->
-        </div> <!-- fin row -->
+              
             </div> <!-- end div col-xs-12 col-sm-9 -->
             
         </div> <!--/.row row-offcanvas row-offcanvas-right-->
@@ -442,20 +299,12 @@ function crearModalMascota($mascota_id){
             print "<div class=\"row\"><div class=\"col-sm-1\"></div>";
         }
         //Si llega al final de la fila de thumbnails
-        if(is_int($contadorMascotas/5) && $contadorMascotas!=0){
+        if(is_int($contadorMascotas/5) && $contadorMascotas!=0 && $contadorMascotas<20){
             print "</div><div class=\"row\"><div class=\"col-sm-1\"></div>";
         }
         //Si se muestra el máximo de mascotas por página
         if($contadorMascotas == 20){
-            print "<div class=\"row\">
-                    <div class=\"col-sm-3\"><\div>
-                    <div class=\"col-sm-2\">
-                        <button type=\"button\" class=\"btn btn-default btn-lg\" onclick=\"siguienteMascota($contadorMascotas)\">
-                            <span class=\"glyphicon glyphicon-arrow-right\" aria-hidden=\"true\"></span> Siguiente
-                        </button>
-                    </div>
-                    </div>
-                   ";
+            print "</div>";
             break;   
         }else{
             $mascota= $mascotasArray[$indMascota];
@@ -468,6 +317,41 @@ function crearModalMascota($mascota_id){
         }
     }
     print "</div>";
+    //Coloca paginación
+    print "<div class=\"row\">
+                    <div class=\"col-sm-1\"></div>
+                    <div class=\"col-sm-8\">
+                        <nav>
+                        <ul class=\"pagination\">
+                          <li>";
+                          if($indMascota>20){
+                              $anterior= $indMascota -($contadorMascotas+20);
+                              print "<a href=\"http://localhost/Adopciones/index.php?cont=$anterior\" aria-label=\"Previous\">";
+                          }
+                            
+                              print"<span aria-hidden=\"true\">&laquo;</span>
+                            </a>
+                          </li>
+                          <li><a href=\"http://localhost/Adopciones/index.php?cont=0\">1</a></li>
+                          <li><a href=\"#\">2</a></li>
+                          <li><a href=\"#\">3</a></li>
+                          <li><a href=\"#\">4</a></li>
+                          <li><a href=\"#\">5</a></li>
+                          <li>";
+                            if($contadorMascotas>=20){
+                                print "<a href=\"http://localhost/Adopciones/index.php?cont=$indMascota\" aria-label=\"Next\">";
+                            }
+                            else{
+                                print "<a href=\"#\" aria-label=\"Next\">";
+                            }
+                            print"<span aria-hidden=\"true\">&raquo;</span>
+                            </a>
+                          </li>
+                          </ul>
+                    </nav>                    
+                    </div>
+                    </div>
+                   ";
     if(isset($_GET['cont'])){
         $indMascota= $_GET['cont'];
     }
