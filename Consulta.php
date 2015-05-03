@@ -188,7 +188,7 @@ class Consulta {
         $stid= oci_parse($conn,"begin :enfermedad:= PAQUETE_MOSTRAR.GET_ENFERMEDAD_MASCOTA(:idMascota);end;");
         $enfermedad;
         
-        oci_bind_by_name($stid, "enfermedad", $enfermedad,50);
+        oci_bind_by_name($stid, "enfermedad", $enfermedad,150);
         oci_bind_by_name($stid, "idMascota", $idMascota);
         
         oci_execute($stid);
@@ -198,5 +198,29 @@ class Consulta {
         }
         
         return $enfermedad;
+    }
+    function getRescatistaPersona($idPersona){
+        $conn= $GLOBALS['conn'];
+        $stid= oci_parse($conn,"begin :idRescatista:= PAQUETE_CALIFICACION.GET_RESCATISTA_ID_PERSONA(:idPersona);end;");
+        $idRescatista;
+        
+        oci_bind_by_name($stid, "idRescatista", $idRescatista,50);
+        oci_bind_by_name($stid, "idPersona", $idPersona);
+        
+        oci_execute($stid);
+        
+        return $idRescatista;
+    }
+    function getAdoptantePersona($idPersona){
+        $conn= $GLOBALS['conn'];
+        $stid= oci_parse($conn,"begin :idAdoptante:= PAQUETE_CALIFICACION.GET_Adoptante_PERSONA(:idPersona);end;");
+        $idAdoptante;
+        
+        oci_bind_by_name($stid, "idAdoptante", $idAdoptante,50);
+        oci_bind_by_name($stid, "idAdoptante", $idMascota);
+        
+        oci_execute($stid);
+        
+        return $idAdoptante;
     }
 }

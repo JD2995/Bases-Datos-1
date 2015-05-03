@@ -82,6 +82,7 @@
         include_once('Consulta.php');
         $modo= $_GET['modo'];   //Obtiene 'adoptante' o 'rescatista'
         $mascota_ID= $_GET['mascota_ID'];   //Obtiene a la mascota por la cual se va a calificar
+        $GLOBALS['mascota_ID']=$mascota_ID;
         $consul= new Consulta();
         $calificado;
         if($modo == "adoptante"){
@@ -111,9 +112,9 @@
         <div class="col-sm-1"></div>
         <div class="col-sm-8">
             <!-- Search box Start -->
-            <form method="post">
+             <?php print "<form role=\"form\" method=\"post\" enctype=\"multipart/form-data\""; $id=$GLOBALS['Persona_ID']; print " action=\"enviarCalificacion.php?idPersona=$id&mascota_ID=$mascota_ID\&modo=$modo  method=\"POST\">";?>
                 <label for="dropdownMenu1">Calificación:</label>
-                  <select id="puntaje">
+                  <select id="puntaje" name="puntaje">
                     <option value="5">5</option>
                     <option value="4">4</option>
                     <option value="3">3</option>
@@ -123,30 +124,19 @@
                 <div class="form-group">
                   
                 </div>
-                <div class="form-group" method="post">
+                <div class="form-group" >
                   <label for="pwd">Notas:</label>
-                  <textarea class="form-control" rows="5" id="notas"></textarea>
+                  <textarea class="form-control" rows="5" name="notas" required placeholder="Nota"></textarea>
                 </div>                
-                <button type="submit" class="btn btn-default">Enviar</button>
+                <div class="form-group">
+                    <div class="col-lg-5">
+                      <input type="submit" value="Ingresar calificacion" class = "btn btn-primary" name="submit">
+                   </div>																									<!-- para que pueda ser procesada y enviada a la base de datos-->				
+                </div>
+                
             </form>
         </div>
     </div>
-    
-    
-    <script type="text/javascript">
-        function getSelectPuntaje(){
-            var e = document.getElementById("puntaje");
-            var seleccion = e.options[e.selectedIndex].text;
-            return seleccion;
-        }
-    </script>
-    <script type="text/javascript">
-        function getTextArea(){
-            var texto = document.getElementById('notas').value;
-            return texto;
-        }
-    </script>        
-    <button class="btn btn-default" onclick="getTextArea()">Prueba</button>
     
     <hr>
     
