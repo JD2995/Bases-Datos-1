@@ -3,6 +3,10 @@
  * Clase que realiza consulta de mascotas
  * @author Javier Rivas
  */
+class Motivo {
+    var $motivo_ID;
+    var $detalle;
+}
 class Consulta {
     function getNoAdoptados($cantMeses){
         $conn= $GLOBALS['conn'];
@@ -213,14 +217,35 @@ class Consulta {
     }
     function getAdoptantePersona($idPersona){
         $conn= $GLOBALS['conn'];
-        $stid= oci_parse($conn,"begin :idAdoptante:= PAQUETE_CALIFICACION.GET_Adoptante_PERSONA(:idPersona);end;");
+        $stid= oci_parse($conn,"begin :idAdoptante:= PAQUETE_CALIFICACION.GET_Adoptante_ID_PERSONA(:idPersona);end;");
         $idAdoptante;
         
         oci_bind_by_name($stid, "idAdoptante", $idAdoptante,50);
-        oci_bind_by_name($stid, "idAdoptante", $idMascota);
+        oci_bind_by_name($stid, "idPersona", $idPersona);
         
         oci_execute($stid);
         
         return $idAdoptante;
+    }
+    
+    function getMotivos(){
+        $conn= $GLOBALS['conn'];
+        $stid= oci_parse($conn,"begin :cursor:= PAQUETE_REGISTRO_DEVOL.GET_MOTIVOS;end;");
+        $p_cursor= oci_new_cursor($conn);
+        
+        oci_bind_by_name($stid, ':cursor', $p_cursor, -1, OCI_B_CURSOR);
+        
+        oci_execute($stid);
+        oci_execute($p_cursor, OCI_DEFAULT);
+        
+        $arrayMotivos= array();
+        while (($row = oci_fetch_array($p_cursor, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
+            $motivo= new Motivo();
+            $motivo->motivo_ID($row['MOTIVO_ID']);
+            $motivo->detalle($row['NOMBRE']);
+            $arrayMotivos[]= $motivo;
+        }
+        
+        return $arrayMotivos;
     }
 }

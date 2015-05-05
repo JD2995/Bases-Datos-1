@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Calificación de usuario</title>
+    <title>Agregar a Catalogo</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -44,25 +44,11 @@
                     <img class = \"nav navbar-nav\"src = \"Imagenes/logo.png\" height=\"42\" width=\"42\"/>
                     <a class=\"navbar-brand\" href=\"index.php\">Buscando mi hogar</a>
                     <ul class=\"nav navbar-nav\">
-                      <li><a href=\"index.php\">Inicio</a></li>";
+                      <li><a href=\"AgregarCatalogo.php\">Inicio</a></li>";
                       setGlobalPersona_ID($usuario);
-                      if(validarRescatista($GLOBALS['Persona_ID'])=='0'){
-                          print "<li><a href=\"#\">Ingresar Mascota</a></li>";
-                      }
-                      print "<li class=\"active\"><a href=\"Adopciones.php\">Adopciones</a></li>
-                          <li>
-                            <div class=\"btn-group\">
-                                <button type=\"button\" class=\"btn btn-default dropdown-toggle\"
-                                        data-toggle=\"dropdown\" style=\"margin-top:9px;background:#2E2E2E;color:#F2F2F2;border:none;\">
-                                  Consulta <span class=\"caret\"></span>
-                                </button>
-                                <ul class=\"dropdown-menu\" role=\"menu\">
-                                  <li><a href=\"#\">Persona</a></li>
-                                  <li><a href=\"#\">Mascota</a></li>
-                                  <li><a href=\"#\">Estadisticas</a></li>
-                                </ul>
-                            </div>	
-                        </li>
+                      print "<li class=\"active\"><a href=\"AgregarCatalogo.php\">Agregar Catalogo</a></li>
+                          <li><a href=\"ModificarCatalogo.php\">Modificar Catalogo</a></li>
+                          <li><a href=\"EliminarCatalogo.php\">Eliminar Catalogo</a></li>
                           <li><a href=\"#about\">Acerca de</a></li>
                     </ul>
                     <form class=\"navbar-form navbar-right\" method=\"POST\" action=\"salir.php\">
@@ -78,25 +64,6 @@
         }
       ?>
       
-      <?php
-        include_once('Consulta.php');
-        $modo= $_GET['modo'];   //Obtiene 'adoptante' o 'rescatista'
-        $mascota_ID= $_GET['mascota_ID'];   //Obtiene a la mascota por la cual se va a calificar
-        $GLOBALS['mascota_ID']=$mascota_ID;
-        $consul= new Consulta();
-        $calificado;
-        if($modo == "adoptante"){
-            $calificado= $consul->getAdoptanteMascota($mascota_ID);
-        }
-        else{
-            $calificado= $consul->getRescatista($mascota_ID);
-        }
-        print "<div class=\"row\">
-                <div class=\"col-sm-1\"></div>
-                <div class=\"col-sm-9\"><h2>Calificar a $calificado</h2></div>
-               </div>";
-      ?>
-      
     <div class="row"></div>
     <div class="row"></div>
     <div class="row"></div>
@@ -110,27 +77,46 @@
     
     <div class="row">
         <div class="col-sm-1"></div>
+        <div class="col-sm-6">
+            <h2>Agregar a Catalogo</h2>
+        </div>
+        
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-1"></div>
         <div class="col-sm-8">
             <!-- Search box Start -->
-             <?php print "<form role=\"form\" method=\"post\" enctype=\"multipart/form-data\""; $id=$GLOBALS['Persona_ID']; print " action=\"enviarCalificacion.php?idPersona=$id&mascota_ID=$mascota_ID&modo=$modo\"  method=\"POST\">";?>
-                <label for="dropdownMenu1">Calificación:</label>
+             <?php print "<form role=\"form\" method=\"post\" enctype=\"multipart/form-data\""; $id=$GLOBALS['Persona_ID']; print " action=\"\"  method=\"POST\">";?>
+                <label for="dropdownMenu1">Catalogo:</label>
                   <select id="puntaje" name="puntaje">
-                    <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="2">2</option>
-                    <option value="1">1</option>
+                    <option value="Canton">Canton</option>
+                    <option value="Color">Color</option>
+                    <option value="Distrito">Distrito</option>
+                    <option value="Enfermedad">Enfermedad</option>
+                    <option value="Entrenamiento">Entrenamiento</option>
+                    <option value="Espacio">Espacio</option>
+                    <option value="Estado">Estado</option>
+                    <option value="Medicamento">Medicamento</option>
+                    <option value="Motivo">Motivo</option>
+                    <option value="Nivel_Energia">Nivel de Energia</option>
+                    <option value="Pais">Pais</option>
+                    <option value="Provincia">Provincia</option>
+                    <option value="Raza">Raza</option>
+                    <option value="Severidad">Severidad</option>
+                    <option value="Tamano">Tamaño</option>
+                    <option value="Tipo">Tipo de mascota</option>
+                    <option value="Tratamiento">Tratamiento</option>
                   </select>
                 <div class="form-group">
                   
                 </div>
                 <div class="form-group" >
-                  <label for="pwd">Notas:</label>
-                  <textarea class="form-control" rows="5" name="notas" required placeholder="Nota"></textarea>
+                  <input type="text" class="form-control" id="usr">
                 </div>                
                 <div class="form-group">
                     <div class="col-lg-5">
-                      <input type="submit" value="Ingresar calificacion" class = "btn btn-primary" name="submit">
+                      <input type="submit" value="Agregar" class = "btn btn-primary" name="submit">
                    </div>																									<!-- para que pueda ser procesada y enviada a la base de datos-->				
                 </div>
                 

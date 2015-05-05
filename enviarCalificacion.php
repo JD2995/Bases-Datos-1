@@ -6,11 +6,14 @@
     $modo= $_GET['modo'];
     $idPersona= $_GET['idPersona'];
     print"$idPersona";
-    if($modo=="adoptante"){
+    print $modo;
+    if($modo == "adoptante"){
         $idRescatista=$consul->getRescatistaPersona($idPersona);
+        $stid= oci_parse($conn,"begin :resul:=PAQUETE_CALIFICACION.CALIFICAR_ADOPTANTE(:idRescatista,:idMascota,:pPuntaje,:pNota);end;");
     }
     else{
         $idRescatista=$consul->getAdoptantePersona($idPersona);
+        $stid= oci_parse($conn,"begin :resul:=PAQUETE_CALIFICACION.CALIFICAR_RESCATISTA(:idRescatista,:idMascota,:pPuntaje,:pNota);end;");
     }
     
     if($idRescatista == -1){
@@ -26,13 +29,6 @@
     $resultado;
     
     $idMascota= $_GET['mascota_ID'];
-    
-    if($modo=="adoptante"){
-        $stid= oci_parse($conn,"begin :resul:=PAQUETE_CALIFICACION.CALIFICAR_ADOPTANTE(:idRescatista,:idMascota,:pPuntaje,:pNota);end;");
-    }
-    else{
-        $stid= oci_parse($conn,"begin :resul:=PAQUETE_CALIFICACION.CALIFICAR_RESCATISTA(:idRescatista,:idMascota,:pPuntaje,:pNota);end;");
-    }
 
     oci_bind_by_name($stid, "resul", $resultado);
     oci_bind_by_name($stid, "idRescatista", $idRescatista);
